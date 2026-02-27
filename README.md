@@ -347,6 +347,7 @@ A structured, cloud-agnostic reference for understanding the core building block
 | [Design a URL Shortener](case-studies/infrastructure/url-shortener.md) | Generate short unique codes and redirect at massive scale with analytics | Counter vs hash-based codes, 301 vs 302 redirect, Redis cache, range-based distributed counter |
 | [Design a CDN](case-studies/infrastructure/cdn-design.md) | Distribute and cache content at global edge locations | Anycast routing, cache key design, request collapsing, stale-while-revalidate, instant purge |
 | [Design a Web Crawler](case-studies/infrastructure/web-crawler.md) | Crawl billions of web pages efficiently without overloading servers | Politeness (robots.txt), Bloom filter URL dedup, SimHash near-dup detection, per-domain rate limiting |
+| [Design a Distributed Job Scheduler](case-studies/infrastructure/distributed-job-scheduler.md) | Schedule and execute millions of jobs exactly-once across a worker fleet | Time-indexed DB polling, transactional outbox, leader election, heartbeat reaper, hot-second mitigation |
 
 ---
 
