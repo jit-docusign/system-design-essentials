@@ -305,7 +305,7 @@ Navigation:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Dijkstra for global routing**: pure Dijkstra is too slow at planet scale. Mention that production systems use precomputed hierarchies (Contraction Hierarchies or A* with heuristics).
 - **Static traffic data**: live traffic is the critical differentiator for navigation apps. Crowd-sourced GPS → map-matching → segment speed aggregation is the pipeline to describe.

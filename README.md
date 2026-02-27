@@ -1,6 +1,8 @@
 # System Design Essentials
 
-A structured, cloud-agnostic reference for understanding the core building blocks and design patterns that underpin large-scale distributed systems. The goal is deep conceptual understanding — not tool-specific tutorials.
+A structured, cloud-agnostic reference for engineers who want to develop deep intuition about how large-scale distributed systems are built, why they are built that way, and what breaks when they are not.
+
+The goal is genuine mastery of the forces, trade-offs, and failure modes that shape every architecture decision — the kind of understanding that lets you design systems you have never seen before, reason confidently about systems you inherit, and make the right call when the constraints change at 2 AM.
 
 ---
 
@@ -408,4 +410,4 @@ When adding a new topic file, the structure should include:
 - **How it works** — the mechanics, with diagrams where helpful
 - **Key trade-offs** — what you gain and what you give up
 - **When to use it** — the problems it solves and the conditions under which it applies
-- **Common interview / design pitfalls** — mistakes to avoid
+- **Hard-Learned Engineering Lessons** — failure modes, edge cases, and the mistakes that have burned real systems in production

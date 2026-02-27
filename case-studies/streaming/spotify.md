@@ -275,7 +275,7 @@ Stream events:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Designing ABR like YouTube**: audio files are 3–10 MB — no need for adaptive bitrate chunking. Buffer the whole song quickly, pre-fetch the next.
 - **Forgetting offline mode design**: offline is a core Spotify feature (especially for mobile). Missing the encrypted local cache, DRM license TTL, and sync mechanism shows a gap.

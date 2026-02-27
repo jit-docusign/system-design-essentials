@@ -306,7 +306,7 @@ async def prefetch_next_videos(feed: list, current_index: int):
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Designing a social-graph feed**: TikTok's FYP is interest-graph based. Designing it like Twitter (fan-out from follows) misses the core product insight.
 - **Forgetting the two-stage recommendation**: 10K candidates → ML ranking → 20 results. Ranking 1M videos in real-time is not feasible; you need a fast candidate retrieval first.

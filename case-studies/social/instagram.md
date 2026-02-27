@@ -329,7 +329,7 @@ async def get_like_count(photo_id: str) -> int:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Only designing happy path**: discuss what happens when the media processing worker crashes mid-job (idempotent tasks, at-least-once delivery).
 - **Forgetting the celebrity problem**: the fan-out model breaks badly for high-follower accounts. Always distinguish normal users from celebrities.

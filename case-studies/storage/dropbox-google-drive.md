@@ -338,13 +338,13 @@ For files > 100 MB, use resumable uploads so a network interruption doesn't requ
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not chunking files**: designing a system that uploads entire files on every change misses the fundamental delta-sync insight of Dropbox.
 
 2. **Missing deduplication**: the same 100 MB video uploaded by 1,000 users should be stored once. Block-level dedup by content hash is a core storage optimization.
 
-3. **Ignoring conflict resolution**: concurrent edits are the hardest part of sync. "Last writer wins" is acceptable but must be stated explicitly; the interview expects you to address this.
+3. **Ignoring conflict resolution**: concurrent edits are the hardest part of sync. "Last writer wins" is acceptable but must be stated explicitly — any real sync system must have a clear, documented conflict policy.
 
 4. **Using a single metadata DB without sharding**: 10 billion files in a single Postgres instance won't work. Shard by owner_id or use a distributed metadata service.
 

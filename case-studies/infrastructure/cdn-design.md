@@ -334,7 +334,7 @@ HLS segment caching:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not explaining cache key design**: the cache key determines whether two requests hit the same cache entry. Forgetting to discuss Vary headers and query string normalization is a gap.
 

@@ -395,7 +395,7 @@ Between-match data (persistent):
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Using HTTP REST for game state updates**: REST adds 100-200ms per request. Game state updates (20/sec per player) need persistent UDP/WebSocket connections.
 

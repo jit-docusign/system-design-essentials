@@ -468,7 +468,7 @@ Distributed Crawler (100 machines):
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not addressing politeness**: sending 1,000 requests/second to a single domain will get your IPs banned and is unethical. Per-domain rate limiting (1 req/sec default) is required.
 

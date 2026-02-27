@@ -260,7 +260,7 @@ class ExperimentService:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Generic CDN**: saying "use CloudFront/Akamai" misses the core Netflix insight — Open Connect is co-located at ISPs for ultra-low latency and massive cost reduction.
 - **Not discussing DRM**: for licensed content, this is non-negotiable. Omitting content protection shows a gap in understanding production video systems.

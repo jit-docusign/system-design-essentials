@@ -264,7 +264,7 @@ async def get_feed_page(user_id: str, cursor: FeedCursor | None) -> dict:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Forgetting groups and pages**: Facebook's feed isn't just friends. You must include groups and pages in your candidate retrieval design.
 - **Chronological ordering**: Facebook does not sort by time. ML ranking is central to the product — at minimum, describe affinity × recency scoring.

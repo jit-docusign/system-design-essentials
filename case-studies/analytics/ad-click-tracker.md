@@ -351,7 +351,7 @@ Advertisers are billed on the batch count, not the real-time estimate.
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Synchronous Kafka write before redirect**: making the user wait for Kafka to confirm will add 10-50ms to redirect latency. Fire-and-forget then redirect.
 

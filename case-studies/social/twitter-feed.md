@@ -269,7 +269,7 @@ Twitter's search has an additional challenge: **real-time indexing**. Tweets sho
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Not mentioning Snowflake IDs**: explaining how you sort tweets without a timestamp index is a differentiator. Snowflake IDs enable this naturally.
 - **Fan-out to inactive users**: naively fanning out to all followers wastes memory. Mention active-user filtering.

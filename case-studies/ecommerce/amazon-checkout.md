@@ -366,7 +366,7 @@ CREATE TABLE order_events (
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not addressing idempotency**: "What happens if the user clicks 'Buy' twice?" or "What if the network drops after payment succeeds but before order confirms?" — These require idempotency keys.
 

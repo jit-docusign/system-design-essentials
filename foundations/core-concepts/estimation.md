@@ -128,4 +128,4 @@ Always state your assumptions first — the assumptions matter more than the ari
 - **Forgetting peak multipliers**: Designing for average load is a recipe for outages. Always apply a 2–3× peak multiplier.
 - **Missing the replication multiplier for storage**: Data stored in 3 replicas costs 3× the raw data size. Always account for replication factor.
 - **Ignoring metadata and indexing overhead**: The raw data size is not the only storage cost. Indexes, WAL, and metadata can 1.5–3× the actual stored size in some systems.
-- **Spending too long on the math in interviews**: Round aggressively ($86{,}400 \approx 10^5$), state the rounding, and move on. Precision is not the goal — demonstrating the reasoning is.
+- **Getting lost in arithmetic precision**: Round aggressively ($86{,}400 \approx 10^5$), state the rounding, and move on. The value is in the order-of-magnitude reasoning, not the exact digits.

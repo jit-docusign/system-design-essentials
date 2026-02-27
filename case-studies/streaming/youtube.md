@@ -281,7 +281,7 @@ Stage 2: Ranking
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Single-quality video storage**: always design for adaptive bitrate (multiple resolutions). A single 1080p file doesn't work for mobile users on 3G.
 - **Not mentioning the CDN pre-warming strategy**: "use a CDN" is obvious. The insight is proactively warming popular videos vs. pull-through caching for tail content.

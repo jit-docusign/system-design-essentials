@@ -19,7 +19,7 @@ A URL shortener has two operations:
 1. **Shorten**: `POST /shorten {url: "..."}` → returns short code
 2. **Redirect**: `GET /{code}` → `HTTP 301/302 Location: <original_url>`
 
-This is a classic interview problem because while the concept is simple, the interesting challenges are in:
+While the concept is simple, the engineering challenges that make it non-trivial are:
 - Collision-free code generation at scale
 - Read-heavy performance (100:1 read/write ratio or higher)
 - Analytics tracking
@@ -332,7 +332,7 @@ User sees analytics: how many clicks, from where, on which devices.
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not discussing the 301 vs. 302 redirect tradeoff**: 301 is permanent and browsers cache it (you lose click tracking). 302 is always correct for analytics.
 

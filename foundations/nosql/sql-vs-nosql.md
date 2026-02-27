@@ -114,16 +114,16 @@ Analytics                                 → BigQuery / Redshift
 
 Changes propagate from the command side to the query side asynchronously (via events). This allows each side to be optimized independently.
 
-### Choosing for an Interview
+### Choosing in Practice
 
-In system design interviews, default to:
-- **PostgreSQL/MySQL** unless there's a clear reason not to.
+When selecting a storage technology for a new system, default to:
+- **PostgreSQL/MySQL** unless there's a clear access-pattern reason not to.
 - **Redis** for caching and sessions.
 - **Cassandra/DynamoDB** when you explicitly need write scale (chat messages, activity feeds, IoT).
 - **Elasticsearch** when you need full-text search.
 - **Time-series DB** when you need metrics.
 
-State your choice, explain why based on access patterns, and be ready to discuss trade-offs.
+Make the choice explicit, anchor it in concrete access patterns, and ensure the trade-offs are understood by everyone who will operate the system.
 
 ---
 

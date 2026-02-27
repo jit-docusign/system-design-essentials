@@ -318,7 +318,7 @@ For gaming leaderboards:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Using a relational DB with ORDER BY for rank**: `SELECT rank FROM (SELECT player_id, RANK() OVER (ORDER BY score DESC) AS rank FROM scores) WHERE player_id = 'X'` — this scans 100M rows on every request.
 

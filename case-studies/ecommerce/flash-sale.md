@@ -327,7 +327,7 @@ Layer 5: Device fingerprinting
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Hitting the database directly**: saying "decrement the DB stock counter on each request" is the most common mistake. 1M concurrent DB writes will deadlock.
 
@@ -339,4 +339,4 @@ Layer 5: Device fingerprinting
 
 5. **Forgetting reservation expiry**: users who reserve but don't pay lock up stock. Must release reservations after 15 minutes.
 
-6. **Not discussing bot prevention**: flash sales without bot mitigation result in bots buying all inventory within milliseconds. Virtual waiting rooms and CAPTCHA are expected in interviews.
+6. **Not discussing bot prevention**: flash sales without bot mitigation result in bots buying all inventory within milliseconds. Virtual waiting rooms and CAPTCHA are essential production requirements for any high-demand sale system.

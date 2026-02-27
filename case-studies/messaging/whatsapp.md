@@ -315,7 +315,7 @@ Implementation:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Using HTTP polling or long-polling**: WebSocket is the right choice for real-time bidirectional messaging. Polling creates unnecessary latency and server load.
 - **Storing messages in a relational database**: 100B messages/day at 1.2M writes/sec will not scale on standard MySQL. Cassandra with a time-series schema is the right fit.

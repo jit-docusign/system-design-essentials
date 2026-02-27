@@ -311,7 +311,7 @@ async def calculate_fare(trip: Trip) -> decimal.Decimal:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Using MySQL/PostgreSQL for location queries**: PostGIS can do geo queries, but 500K writes/sec with sub-10ms read latency is Redis territory.
 - **Not handling driver going offline mid-search**: TTL-based expiry cleans this up automatically. Without TTL, you'd serve offline drivers to riders.

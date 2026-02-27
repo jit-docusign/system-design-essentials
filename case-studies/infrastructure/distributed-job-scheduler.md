@@ -381,13 +381,13 @@ Each shard independently polls its subset of the index. Adding a shard requires 
 
 ---
 
-## 5. Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Polling the entire jobs table every second** — forgetting to index `next_run_at` leads to full-table scans. Always use a filtered, sorted index and only read a narrow time window.
 
 2. **Ignoring timezone handling** — cron expressions like `0 9 * * *` mean 9 AM in the job's configured timezone, not UTC. Forgetting DST transitions causes jobs to fire at the wrong time twice a year.
 
-3. **Omitting the exactly-once discussion** — most candidates say "use a queue" without explaining how they prevent the scheduler from re-enqueueing on crash recovery. Transactional outbox or `FOR UPDATE SKIP LOCKED` is expected at senior level.
+3. **Omitting the exactly-once discussion** — most teams say "use a queue" without explaining how they prevent the scheduler from re-enqueueing on crash recovery. Transactional outbox or `FOR UPDATE SKIP LOCKED` is the correct answer, and knowing why matters at any scale.
 
 4. **Single scheduler = SPOF** — the system needs a leader-election mechanism (Redis lock, Zookeeper ephemeral node, or DB advisory lock) so standby schedulers take over within seconds.
 

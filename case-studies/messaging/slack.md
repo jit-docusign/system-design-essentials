@@ -308,7 +308,7 @@ Result: 50 internal messages (1 per server) instead of 500 individual deliveries
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Not modeling the workspace boundary**: all Slack data is workspace-scoped. Omitting this leads to cross-tenant data leaks in the design.
 - **Using a relational DB for messages**: message volume (750M/day) and time-series access pattern (last N messages in a channel) are not a good fit for a single relational DB.

@@ -311,7 +311,7 @@ Solutions:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not distinguishing event time from processing time**: events arrive late (mobile offline, network lag). Using server ingestion time for analytics gives wrong results. Always record `client_timestamp` and process with it.
 

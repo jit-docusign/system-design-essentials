@@ -357,7 +357,7 @@ S3 validates the signature on each request — no auth header needed from client
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Storing objects in a database**: Object storage is NOT a relational DB. Files go in a distributed block store; only metadata goes in a DB/KV store.
 

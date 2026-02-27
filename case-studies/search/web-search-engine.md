@@ -240,7 +240,7 @@ Snippet Generation:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 - **Not designing crawl politeness**: a crawler that doesn't respect robots.txt and rate limits will get blocked. It's a required component.
 - **Single-machine index**: discussing how to fit 30 trillion pages in memory of one server doesn't work. Sharding is mandatory.

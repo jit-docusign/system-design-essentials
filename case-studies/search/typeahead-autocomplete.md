@@ -374,7 +374,7 @@ Personal model:
 
 ---
 
-## Common Interview Mistakes
+## Hard-Learned Engineering Lessons
 
 1. **Not debouncing the client**: saying "send a request on every keystroke" means ~10 RPS per user × 50K active users = 500K RPS for just one fast typist. Debounce brings this to ~1 RPS/user.
 
@@ -382,7 +382,7 @@ Personal model:
 
 3. **Assuming a single machine**: a Trie for all English queries comfortably fits in a few GB, but for global multi-language at 100M queries it doesn't. Show you know to shard.
 
-4. **Ignoring ranking**: returning suggestions in lexicographic order (alphabetical) rather than by popularity is a common mistake interviewers look for.
+4. **Ignoring ranking**: returning suggestions in lexicographic order (alphabetical) rather than by popularity is a fundamental UX failure — users always expect the most relevant result first, not the alphabetically earliest.
 
 5. **Conflating typeahead with search**: typeahead completes the query string; full-text search finds documents. They often coexist but have very different architectures.
 
