@@ -10,6 +10,8 @@ The **CAP Theorem**, formulated by Eric Brewer in 2000 and formally proven by Gi
 
 In practice, **network partitions are not optional** — any networked system must tolerate them. This means the real choice is always between **Consistency and Availability** when a partition occurs.
 
+> **Important precision**: The "C" in CAP is specifically **linearizability** — the guarantee that once a write is acknowledged, any subsequent read from any node returns that value. It is not serializability (transaction-level ordering), and it is not the same "C" as in ACID (constraint satisfaction). This distinction matters when evaluating vendor claims of "CAP consistency".
+
 ---
 
 ## How it works
@@ -87,6 +89,7 @@ CAP is a useful mental model but has limitations:
 2. **It only addresses partitions**: It says nothing about the latency/consistency trade-off under *normal* operation. PACELC addresses this gap.
 3. **"Available" is loosely defined**: CAP's definition of availability (any response) doesn't distinguish between a correct stale response and a completely wrong one.
 4. **Partitions are rare, but their handling still matters**: Most CAP discussion focuses on the partition case, but the design choices made for partitions affect everyday behavior.
+5. **The CP/AP binary is often misleading in practice**: Martin Kleppmann's critique ("A Critique of the CAP Theorem", 2015) demonstrates that the CP/AP categorisation breaks down for many real systems. A system labelled "CP" might still return stale data under some operations. A system labelled "AP" might provide linearizable behaviour on specific read paths depending on configuration. The label is a useful starting point, not a precise specification of behaviour. When correctness actually matters, you need to reason about the specific guarantees of the specific operations you are using — not the CAP label on the tin.
 
 ---
 
@@ -107,4 +110,5 @@ For more nuanced design, use PACELC, consistency levels, and quorum configuratio
 - **Thinking CP means "always consistent"**: CP databases are only consistent when they agree to respond — they may still have eventual consistency in replicas or allow tunable consistency levels.
 - **Ignoring the latency dimension**: A CP system that takes 30 seconds to respond "correctly" during a partition may be worse than an AP system that returns slightly stale data instantly.
 - **Applying CAP at the system level, not the operation level**: Many databases expose both CP and AP behavior depending on the operation or consistency level chosen per query (e.g., Cassandra).
+- **Taking CP/AP labels at face value**: As the Kleppmann critique shows, the label is an approximation. Verify the actual consistency guarantees of the operations your system depends on, not the marketing classification.
 - **Over-relying on CAP as a final answer**: It's a theorem about a narrow trade-off. Real system design requires understanding much more — replication strategies, failure modes, SLAs, and consistency models.

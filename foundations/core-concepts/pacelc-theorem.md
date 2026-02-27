@@ -100,4 +100,5 @@ Use PACELC when:
 - **Stopping at CAP**: CAP tells you what happens during a partition. PACELC tells you what your system behaves like 99.9% of the time — which is equally important.
 - **Assuming synchronous replication is always "better"**: It provides stronger consistency but at a significant latency and availability cost. Many production systems are intentionally EL.
 - **Ignoring tunable consistency**: Many systems (Cassandra, DynamoDB) are PA/EL by default but can approximate PC/EC behavior for specific operations — understanding PACELC helps you make that decision consciously.
+- **Not auditing your stack's PACELC positions**: Most systems use several storage layers. An API that reads from an EL cache, falls back to an EL replica, and writes to an EC primary has a complex composite PACELC position that may not be obvious from any single component's documentation.
 - **Not communicating the trade-off to stakeholders**: Choosing EL means some users will occasionally read stale data. Teams that don't understand this ship bugs or file incorrect "data loss" incidents.

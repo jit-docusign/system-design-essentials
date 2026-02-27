@@ -80,6 +80,28 @@ The relationship is often described as:
 
 $$\text{Throughput} \approx \frac{\text{Concurrency}}{\text{Latency}}$$
 
+#### Queue Saturation and the M/M/1 Model
+
+Queueing theory gives a precise explanation for why P99 latency explodes at high utilisation long before a system appears "full".
+
+In an **M/M/1 queue** (single server, Poisson arrivals, exponential service times), the average wait time in queue is:
+
+$$W_q = \frac{\rho}{\mu(1 - \rho)}$$
+
+Where $\rho = \lambda / \mu$ is **utilisation** (arrival rate over service rate).
+
+| Utilisation ($\rho$) | Queue wait (relative to service time) |
+|---|---|
+| 50% | 1× service time |
+| 80% | 4× service time |
+| 90% | 9× service time |
+| 95% | 19× service time |
+| 99% | 99× service time |
+
+As $\rho \to 1$, wait time $\to \infty$. This is why P99 latency starts degrading sharply around 70–80% utilisation, well before you are technically at capacity. **Designing for 100% utilisation is a design for unbounded latency.** Most production systems target 60–70% peak utilisation to keep tail latency predictable.
+
+This model also explains why **bursting matters**: a system that handles average load fine can exhibit severe P99 blowup during a short traffic spike because even a temporary $\rho > 1$ causes the queue to grow without bound until the burst ends.
+
 ---
 
 ## Key Trade-offs
@@ -114,3 +136,5 @@ $$\text{Throughput} \approx \frac{\text{Concurrency}}{\text{Latency}}$$
 - **Confusing network bandwidth with latency**: A high-bandwidth link can still have high round-trip latency. Bandwidth and latency are independent properties.
 - **Optimizing throughput at the cost of unacceptable tail latency**: In user-facing systems, a slow P99 is often more damaging than lower average throughput.
 - **Not accounting for serialization overhead**: In high-throughput systems, the CPU cost of JSON serialization/deserialization can dominate; switching to binary formats (Protobuf) is a common fix.
+- **Coordinated omission in benchmarks**: Most load-testing tools measure the latency of requests they were able to send — they do not account for the requests that were *waiting to be sent* while the system was overloaded. This produces artificially low latency numbers. A benchmark that shows P99 = 20ms under load may be omitting the 30% of requests that were queued for 5 seconds waiting for the tool's thread pool. Gil Tene's work on HdrHistogram and coordinated omission is the canonical reference. When evaluating any benchmark, ask: does this tool account for the full sojourn time, or only the in-flight service time?
+- **Designing to 100% utilisation**: As the M/M/1 model shows, latency degrades nonlinearly as utilisation approaches capacity. Target 60–70% peak utilisation for predictable tail latency.

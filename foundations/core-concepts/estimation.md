@@ -97,7 +97,28 @@ $$\text{Servers} = \frac{\text{Peak QPS}}{\text{QPS per server}}$$
 
 ---
 
-### Full worked example: Design a URL Shortener
+### Step 7: Translate to cost
+
+Estimating resources without connecting them to cost misses half the value. Use rough reference numbers to sense-check architecture decisions:
+
+| Resource | Rough unit cost (AWS rough order of magnitude) |
+|---|---|
+| General-purpose compute (m5.xlarge, 4 vCPU / 16 GB) | ~$150/month |
+| Storage: SSD EBS | ~$0.10 / GB-month |
+| Storage: S3 object storage | ~$0.023 / GB-month |
+| Storage: Glacier archival | ~$0.004 / GB-month |
+| Data transfer out (internet) | ~$0.09 / GB |
+| Managed cache (ElastiCache r6g.large, 13 GB RAM) | ~$150/month |
+| Managed DB (RDS db.m5.xlarge, Multi-AZ) | ~$500/month |
+
+*Prices vary by region, reserved vs on-demand, and negotiated rates. These are for order-of-magnitude reasoning only.*
+
+**Example**: 95 TB of user data over 5 years.
+- On SSD: 95,000 GB × $0.10 = **$9,500/month** in storage alone — a signal to evaluate tiered storage.
+- Move data older than 90 days to S3 ($0.023/GB): if 80% of data is cold, active SSD tier = 19 TB ($1,900/month), cold S3 tier = 76 TB ($1,748/month) — total ~$3,650/month. Tiering saves ~60%.
+- At 76 TB cold, if access pattern further allows archival after 1 year: Glacier at $0.004/GB changes the math again.
+
+Cost estimation like this is how architectural decisions get made in practice: a back-of-the-envelope that reveals tiering is necessary is worth more than a polished diagram that ignores the storage bill.
 
 **Assumptions**: 100M DAU; 1 write per day (create short URL), 10 reads per day (redirect).
 
@@ -129,3 +150,5 @@ Always state your assumptions first — the assumptions matter more than the ari
 - **Missing the replication multiplier for storage**: Data stored in 3 replicas costs 3× the raw data size. Always account for replication factor.
 - **Ignoring metadata and indexing overhead**: The raw data size is not the only storage cost. Indexes, WAL, and metadata can 1.5–3× the actual stored size in some systems.
 - **Getting lost in arithmetic precision**: Round aggressively ($86{,}400 \approx 10^5$), state the rounding, and move on. The value is in the order-of-magnitude reasoning, not the exact digits.
+- **Stopping at resource counts without computing cost**: An estimate that yields "we need 200 TB of SSD" without translating to a monthly bill misses the decision it should enable — whether tiering, compression, or a different storage model is worth it.
+- **Not using estimates to foreclose options**: The value of estimation is knowing early when an assumption breaks. An estimate that shows you need 10 TB/day of writes immediately tells you a single-node database won't work — sharding or a different storage model must be baked in from the start.

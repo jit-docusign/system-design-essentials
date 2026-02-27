@@ -46,6 +46,24 @@ t=100ms: Node A: X=2 |  Node B: X=2          |  Node C: X=2 (synced)
 
 Between t=0 and t=100ms, reads from different nodes may return different values. After t=100ms, all nodes agree — they have "eventually converged."
 
+#### Bounded Staleness
+
+Pure eventual consistency gives no time bound on convergence. **Bounded staleness** is a stronger variant that guarantees a read will never return data older than a defined staleness window — for example, at most 15 seconds behind the leader.
+
+This is a meaningful operational commitment: it turns "eventually" into a contractual lag that can be monitored and alarmed on. Azure Cosmos DB exposes bounded staleness as an explicit consistency level, configurable in both time (seconds) and version count (number of writes behind). It sits between strong consistency and eventual consistency on the spectrum — useful when slightly stale data is acceptable but unbounded divergence is not.
+
+#### Anti-Entropy: How Replicas Actually Converge
+
+Convergence doesn't happen by magic — systems use explicit **anti-entropy** mechanisms to detect and repair divergence:
+
+| Mechanism | Description |
+|---|---|
+| **Read repair** | When a read detects that replicas returned different values, the coordinator writes the latest value back to the stale replicas. Happens inline with the read path. |
+| **Hinted handoff** | When a replica is temporarily unavailable, another node stores the write on its behalf (a "hint"). When the replica recovers, the hint is replayed to bring it up to date. Prevents divergence during short outages. |
+| **Merkle tree anti-entropy** | Each node builds a Merkle tree over its key range. Nodes periodically exchange tree roots and bisect to find divergent subtrees efficiently, then sync only the differing key ranges. Used by Cassandra and Amazon Dynamo for full background repair. |
+
+The operational implication: if you run Cassandra and never run `nodetool repair`, Merkle tree anti-entropy does not happen automatically on a schedule by default in older versions. Data that diverged during outages may never converge without it.
+
 ### Conflict Resolution
 
 When two nodes accept conflicting writes (both receive different values for the same key during a partition), they must reconcile after the partition heals. Common strategies:
@@ -92,4 +110,5 @@ Avoid BASE when:
 - **Assuming eventual consistency is always fast**: "Eventually" could be milliseconds or could be minutes/hours if a partition lasts a long time or nodes are under load.
 - **Not informing clients about staleness**: If a user writes data and immediately reads it back from a different replica, they may not see their own write — this violates "read-your-writes" and feels like a bug. Design UX and application logic to account for this.
 - **Underestimating the complexity of conflict resolution**: Last Write Wins is simple but lossy. More correct strategies (siblings, CRDTs) are complex to implement correctly.
+- **Not running repairs**: In systems like Cassandra, divergence accumulated during node failures will not self-heal without explicit anti-entropy repair. Teams that never run repair discover this during a crisis.
 - **Using BASE for everything**: Some parts of a system truly require ACID (the payments service). Use BASE selectively where the trade-offs are acceptable, rather than as a universal default.

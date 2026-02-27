@@ -50,6 +50,23 @@ In distributed systems, consistency has multiple levels (the **consistency spect
 | **Monotonic reads** | Once a client reads a value, it never reads an older one | Prevents seeing data go "backward" |
 | **Eventual consistency** | Given no new writes, all replicas converge to the same value | DNS, Cassandra (with default settings) |
 
+### Linearizability vs Serializability
+
+These two terms are both called "consistency" and are frequently conflated, including in vendor documentation. They are different properties that operate at different levels:
+
+| Property | Scope | What it guarantees |
+|---|---|---|
+| **Linearizability** | Single object, single operation | Once a write is acknowledged, all subsequent reads (from any node, any client) see that write. Operations appear to take effect at a single point in real time. |
+| **Serializability** | Multiple objects, multiple operations (transactions) | The result of concurrent transactions is equivalent to *some* serial execution order — but that order doesn't have to match real time. |
+
+A database can be serializable without being linearizable: it could execute transactions as if they ran serially, but allow a committed write to be invisible to a concurrent read that started *after* the commit if the read is served from a stale replica.
+
+A database can be linearizable on individual reads/writes without being serializable: it might guarantee that each individual key operation is instantaneously visible, but not provide transaction-level isolation across multiple keys.
+
+**Strict serializability** (also called **external consistency**) is both simultaneously: transactions are serializable *and* their serial order matches real time. This is the gold standard. Google Spanner achieves it using **TrueTime** — atomic clock and GPS receivers in every data centre that bound clock uncertainty to single-digit milliseconds. By waiting out that uncertainty window before committing, Spanner guarantees that any read issued after a commit sees the committed value, globally, even across continents.
+
+This distinction matters in practice: when a vendor says a database is "strongly consistent", ask whether they mean linearizable per key, serializable per transaction, or strictly serializable across both.
+
 ### The Core Tension
 
 Strong consistency requires that before a write is acknowledged, it must be confirmed by a quorum of nodes. This means:
@@ -91,6 +108,8 @@ Strong consistency requires that before a write is acknowledged, it must be conf
 
 - **Assuming "eventually consistent" means "probably fine"**: Eventual consistency without proper conflict resolution can lead to permanent data loss or incorrect final states.
 - **Ignoring read-your-writes**: A user submits a form, then immediately reads and doesn't see their change — this feels broken even if the system is "eventually consistent."
+- **Conflating linearizability and serializability**: They are different properties. A system can satisfy one without the other. Vendor claims of "strong consistency" rarely specify which — always ask.
 - **Conflating availability with reliability**: An available system returns responses even if wrong; a reliable system only returns correct responses. These are distinct goals.
 - **Not modeling failure modes**: Consistency/availability trade-offs only matter when something fails. Most systems work fine under both models — design for what happens in the 1% failure case.
 - **Treating consistency as binary**: There are many levels on the consistency spectrum. Requiring strictly serializable behavior everywhere is unnecessarily expensive; pick the weakest consistency level that is still correct for each use case.
+- **Not accounting for read-your-writes in multi-region**: Write to region A, read from region B — replication lag means the write may not yet be visible. Applications must either route reads to the write region or tolerate this until replication converges.

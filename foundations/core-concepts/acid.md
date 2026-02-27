@@ -86,6 +86,8 @@ Choose a database with strong ACID guarantees when:
 
 - **Assuming "ACID" means everything is safe**: ACID protects against crashes and concurrency issues *at the database level*. Application-level bugs (wrong queries, missing transactions) are your responsibility.
 - **Using serializable isolation by default**: It provides the strongest guarantees but can create deadlocks and dramatically reduce throughput. Use the **weakest isolation level** that is still correct for your use case.
+- **Ignoring write skew**: Many teams assume Repeatable Read is sufficient. It is not when two transactions read overlapping data and write to different rows based on that read. Audit your critical paths for write skew, especially in scheduling, booking, and resource-allocation workflows.
 - **Ignoring distributed ACID complexity**: ACID in a single-node database is well understood. Distributed ACID (across multiple databases or services) requires protocols like 2-Phase Commit or the Saga pattern — which have high coordination costs and failure modes of their own.
 - **Conflating ACID consistency with CAP consistency**: They are completely different. ACID consistency is about constraints and invariants; CAP consistency is about distributed replicas agreeing on the same value.
 - **Long-running transactions**: Holding transactions open for seconds or minutes causes lock contention, blocks other transactions, and can exhaust connection pools. Keep transactions short and targeted.
+- **Assuming SSI is free**: SSI avoids most locking overhead but does abort transactions under detected conflicts. Applications must implement retry logic. Under high-conflict workloads, abort rates can be high enough that 2PL or application-level serialisation is preferable.
